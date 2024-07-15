@@ -1,0 +1,27 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+# Dependency directories
+node_modules/
+npm-debug.log
+
+# Environment variables
+.env
+
+# Compiled binary addons (if any)
+build/Release
+
+# Logs
+logs
+*.log*
+
+
+
+# Editor/IDE specific
+.vscode/
+.idea/

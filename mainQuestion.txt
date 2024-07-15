@@ -1,0 +1,21 @@
+What is the purpose of the isLogged middleware in this application?
+This middleware is used to check if a user is logged in before allowing access to certain routes. It's a common pattern in web applications to protect routes that require authentication.
+How does the application handle user authentication?
+The application uses Passport.js with a local strategy for user authentication. Passport.js is a middleware for Express.js that provides a comprehensive set of strategies for authentication, including OAuth, OpenID, and local username and password authentication.
+What is the role of the multer middleware in this application?
+Multer is a middleware for handling multipart/form-data, which is primarily used for uploading files. In this application, it's used to handle image uploads for user profiles.
+How does the application manage user sessions?
+The application uses Passport.js for managing user sessions. When a user logs in, Passport.js creates a session for the user, and this session is used to maintain the user's logged-in state across requests.
+What is the purpose of the upload.single('image_upload') middleware in the /profile/upload route?
+This middleware is provided by Multer and is used to handle a single file upload with the field name image_upload. It processes the uploaded file and makes it available in req.file.
+How does the application handle image uploads for user profiles?
+When a user uploads an image, the application saves the image to the uploads/ directory and updates the user's profile in the database with the filename of the uploaded image. This is done using the findByIdAndUpdate method of the user model, which updates the user's document with the new image filename.
+What is the purpose of the dotenv module and why is it used in this application?
+The dotenv module is used to load environment variables from a .env file into process.env. This is a common practice for managing sensitive information like database credentials, API keys, and other configuration settings that should not be hard-coded into the application.
+How does the application handle errors during file uploads or database operations?
+The application uses try-catch blocks to handle errors during file uploads and database operations. If an error occurs, it logs the error and redirects the user to a different page, such as the home page or the profile page, depending on the context.
+What is the purpose of the passport.authenticate('local') middleware in the /register route?
+This middleware is provided by Passport.js and is used to authenticate the user with the local strategy after they have registered. It logs the user in and then redirects them to the profile page.
+How does the application handle user logout?
+The application uses the req.logout() method provided by Passport.js to terminate a login session. This method is called when the user requests to log out, and it clears the login session, effectively logging the user out.
+These questions cover various aspects of the application, including authentication, session management, file uploads, error handling, and environment configuration. They are designed to assess the candidate's understanding of these concepts and their ability to implement them in a Node.js application using Express.js and related middleware.

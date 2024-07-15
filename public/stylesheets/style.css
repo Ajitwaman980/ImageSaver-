@@ -1,0 +1,82 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  width: 100%;
+  height: 100vh;
+  background-size: cover;
+}
+.container {
+  background-color: #fff;
+  width: 250px;
+  padding: 20px;
+  height: 380px;
+  border: 2px solid black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 30px;
+  color: blue;
+}
+.input_field {
+  margin: 15px 0;
+  border: 2px solid black;
+  background: transparent;
+  display: flex;
+  max-height: 65px;
+  overflow: hidden;
+  padding: 10px;
+}
+.input_field input {
+  width: 100%;
+  border: 0;
+  outline: none;
+  padding: 6px 4px;
+}
+.input_field i {
+  margin-top: 5px;
+  padding: 1.2px;
+}
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 7px;
+}
+.btn button {
+  border-radius: 20%;
+  border-color: yellow;
+
+  padding: 5px;
+}
+.login {
+  background-color: white;
+  color: black;
+  width: 250px;
+  padding: 20px;
+  border: 2px solid black;
+  padding-top: 10px;
+  height: 320px;
+}
+#sign_in_btn {
+  margin-bottom: 20px;
+  position: absolute;
+  top: 67%;
+  padding: 6px;
+  background-color: ghostwhite;
+}
+#title {
+  background-color: aqua;
+}
+#title1 {
+  padding-right: 20px;
+}

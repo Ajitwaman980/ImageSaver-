@@ -1,0 +1,25 @@
+This code snippet is a part of a Node.js application using Express.js for routing and Passport.js for authentication. It handles various routes related to user authentication, profile management, and image uploads. Here's a concise summary of its functionality:
+
+Setup and Middleware:
+Imports necessary modules including Express, Passport, a user model, and Multer for handling file uploads.
+Configures Passport to use a local strategy for authentication.
+Sets up an Express router for handling routes.
+Routes:
+Home Page: Renders the home page (index.ejs).
+Admin Page: Fetches all user data from the database and sends it as a response.
+Profile Page:
+Renders the profile page (profile.ejs) with user information if the user is logged in.
+Handles image uploads for the user's profile, updating the database with the uploaded image filenames.
+Sign Up and Login:
+Renders sign-up and login pages (sign_in.ejs and login.ejs).
+Handles user registration and login using Passport's local strategy.
+Logout: Logs the user out and redirects to the home page.
+Authentication and Authorization:
+Uses a middleware function isLogged to check if a user is logged in before allowing access to certain routes (e.g., the profile page).
+Image Upload:
+Utilizes Multer for handling image uploads in the profile upload route.
+Stores uploaded images in an uploads/ directory and updates the user's profile with the image filenames.
+Error Handling:
+Includes try-catch blocks for handling errors during database operations and file uploads.
+Environment Variables:
+Uses the dotenv module to load environment variables from a .env file, which is a common practice for managing sensitive information like database credentials.

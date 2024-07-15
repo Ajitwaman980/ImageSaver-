@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload Images</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+    }
+
+    .container {
+      width: 400px;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .img-upload {
+      text-align: center;
+    }
+
+    .img-upload input[type="file"] {
+      display: none;
+    }
+
+    .img-upload label {
+      display: inline-block;
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .img-upload label:hover {
+      background-color: #45A049;
+    }
+
+    .img-upload button {
+      display: block;
+      margin: 20px auto 0;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .img-upload button:hover {
+      background-color: #45A049;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Upload Images</h1>
+    <div class="img-upload">
+      <form action="/profile/upload" method="post" enctype="multipart/form-data">
+        <input type="file" id="image_upload" name="image_upload" multiple accept="image/*" />
+        <label for="image_upload">Choose Images</label>
+        <button type="submit">Upload</button>
+      </form>
+    </div>
+  </div>
+</body>
+
+</html>

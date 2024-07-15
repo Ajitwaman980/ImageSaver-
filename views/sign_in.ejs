@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up</title>
+  <link rel="stylesheet" href="/stylesheets/style.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+  <style>
+    body {
+      background-color: #a9f3f3;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .main_div_sign_in {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    .text_sign_in {
+      max-width: 50%;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .text_sign_in h1 {
+      font-family: serif;
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    .text_sign_in p {
+      margin-top: 1rem;
+      font-size: 1.1rem;
+      color: #666;
+    }
+
+    .text_sign_in p a {
+      color: #4caf50;
+      text-decoration: none;
+    }
+
+    .form-container {
+      max-width: 50%;
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-container h1 {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .input_field {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    .input_field input {
+      width: 100%;
+      padding: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .btn {
+      margin-top: 1.5rem;
+      text-align: center;
+    }
+
+    .btn button {
+      width: 100%;
+      padding: 1rem;
+      background-color: #4caf50;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .btn button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+
+<body>
+
+  <% if (error && error.length> 0) { %>
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      <%= error %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <% } %>
+      <div class="main_div_sign_in">
+        <div class="text_sign_in">
+          <h1>Every moment is a fresh beginning!</h1>
+          <p>Already have an account? <a href="/login/user">Sign in here</a></p>
+        </div>
+        <div class="form-container" id="signup-form">
+          <h1>Sign Up</h1>
+          <form action="/register" method="post">
+            <div class="input_field">
+              <input type="text" name="username" id="username" placeholder="Username" required />
+            </div>
+            <div class="input_field">
+              <input type="email" name="email" placeholder="Email" required />
+            </div>
+            <div class="input_field">
+              <input type="password" name="password" placeholder="Password" required />
+            </div>
+            <div class="input_field">
+              <input type="text" name="aboutYou" placeholder="About You" />
+            </div>
+            <div class="btn">
+              <button type="submit">Sign Up</button>
+            </div>
+          </form>
+        </div>
+      </div>
+</body>
+
+</html>

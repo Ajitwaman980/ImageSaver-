@@ -1,0 +1,169 @@
+var express = require("express");
+const passport = require("passport");
+const usermodel = require("../model/database.js");
+var router = express.Router();
+const localStrategy = require("passport-local");
+passport.use(new localStrategy(usermodel.authenticate()));
+const isLogged = require("../Controller/middleware/auth.js"); //
+require("dotenv").config();
+const multer = require("multer"); //handling images upload
+// const sharp = require("sharp"); //this is used to convert large image size into small images size
+const cloudinary_for_storage = require("../utility/cloudinary.js");
+const upload = multer({ storage: cloudinary_for_storage }); //destination of images
+const fs = require("fs");
+/* GET home page. */
+router.get("/", function (req, res) {
+  res.render("index.ejs");
+});
+router.get("/home", (req, res) => {
+  res.render("index.ejs");
+});
+
+router.get("/profile", isLogged, async function (req, res) {
+  // access user id user.id
+  try {
+    const user_id = req.user._id;
+    console.log(user_id);
+    const user_info = await usermodel.findById(user_id);
+    const { username, email, aboutYou, uploadedImages } = user_info;
+    console.log(uploadedImages.Url);
+    res.render("profile.ejs", {
+      username: username,
+      email: email,
+      uploadedImages: uploadedImages,
+    });
+  } catch (err) {
+    console.error("Error fetching user data:", err);
+    res.redirect("/");
+  }
+
+  //access data from data base
+});
+// upload img
+router.get("/profile/upload", function (req, res) {
+  res.render("upload.ejs");
+});
+// upload images used multer
+router.post(
+  "/profile/upload",
+  upload.single("image_upload"),
+  isLogged,
+  async function (req, res) {
+    if (req.file) {
+      const imageFilename = req.file.filename;
+      console.log(imageFilename);
+      try {
+        const userId = req.user._id;
+
+        // upload img used push bcoze it array
+        await usermodel.findByIdAndUpdate(
+          userId,
+          { $push: { uploadedImages: imageFilename } },
+          { new: true }
+        );
+
+        console.log("Image uploaded and linked to the user.");
+        res.redirect("/profile");
+      } catch (error) {
+        console.error("Error uploading image:", error);
+        res.redirect("/profile");
+      }
+    } else {
+      // No file uploaded
+      res.redirect("/profile");
+    }
+  }
+);
+// delete img form database
+router.post("/profile/delete", isLogged, async function (req, res) {
+  const userId = req.user._id;
+  // delete_file_name is name of form
+  const { delete_file_name } = req.body;
+  // console.log(delete_file_name);
+
+  try {
+    const Delete_image = await usermodel.findByIdAndUpdate(
+      userId,
+      { $pull: { uploadedImages: delete_file_name } },
+      { new: true }
+    );
+    // delete image form upload folder
+    const imagePath = path.join(__dirname, "../uploads/", delete_file_name);
+    fs.unlinkSync(imagePath);
+    console.log("Image deleted successfully.");
+    res.redirect("/profile");
+  } catch (e) {
+    res.redirect("/profile");
+  }
+});
+
+//Sign up ejs file render using resister route
+router.get("/Sign_up", (req, res) => {
+  res.render("sign_in.ejs");
+});
+// sign in user using username email and about u
+router.post("/register", function (req, res) {
+  let userdata = new usermodel({
+    username: req.body.username,
+    email: req.body.email,
+    aboutYou: req.body.aboutYou,
+  });
+
+  usermodel
+    .register(userdata, req.body.password)
+    .then(function (registeredUser) {
+      passport.authenticate("local")(req, res, function () {
+        res.cookie("username", registeredUser.username);
+        res.cookie("email", registeredUser.email);
+        res.redirect("/profile");
+      });
+    })
+    .catch(function (error) {
+      console.error("Error registering user:", error);
+      res.redirect("/register");
+    });
+});
+
+// login
+router.get("/login", (req, res) => {
+  res.render("login.ejs");
+});
+// login user using passport authentication
+router.post(
+  "/login",
+  passport.authenticate("local", {
+    successRedirect: "/profile",
+    failureRedirect: "/",
+  }),
+  function (req, res) {
+    // Set cookies here
+    res.cookie("username", req.user.username);
+    res.cookie("email", req.user.email);
+    console.log("Cookies sent successfully.");
+  }
+);
+
+// log out
+router.get("/logout", (req, res, next) => {
+  // req.logout() is a method provided by Passport.js to terminate a login session
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/");
+  });
+});
+// delete account
+router.get("/delete/account", async function (req, res) {
+  const userId = req.user._id;
+  try {
+    if (userId) {
+      const delete_user_account = await usermodel.findByIdAndDelete(userId);
+    }
+
+    res.redirect("/");
+  } catch (e) {
+    res.redirect("/");
+  }
+});
+module.exports = router;
