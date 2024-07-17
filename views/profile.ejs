@@ -39,6 +39,8 @@
       padding: 10px;
     }
   </style>
+  <link rel="icon" href="../android-chrome-512x512.png">
+
 </head>
 
 <body>
@@ -59,10 +61,14 @@
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
               <li class="nav-item">
-                <a class="nav-link btn btn-danger text-white ms-2" href="/delete/account">Delete Account</a>
+                <a id="account" class="nav-link account btn btn-danger text-white ms-2"
+                  href="/delete/account/<%=user_id%>">Delete
+                  Account</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link btn btn-primary text-white ms-2" href="/profile/upload">Upload</a>
+                <a class="nav-link btn btn-primary text-white ms-2"
+                  href="/profile/upload/<%= user_id %>/image">Upload</a>
+
               </li>
               <li class="nav-item">
                 <a class="nav-link btn btn-danger text-white ms-2" href="/logout">Logout</a>
@@ -73,23 +79,30 @@
       </nav>
 
       <div class="container-fluid row">
-        <% for(let i=0; i < uploadedImages.length; i++) { %>
-          <div class="col-md-3">
-            <div class="card mt-2 mb-2 ">
-              <img src="<%= uploadedImages[i]%>" class="card-img-top" alt="Uploaded Image" />
-              <div class="card-body">
-                <a href="<%= uploadedImages[i] %>" download="image_<%= i %>.jpg" class="btn btn-primary">View</a>
-                <form action="/profile/delete" method="post">
-                  <input type="hidden" name="delete_file_name" value="<%= uploadedImages[i] %>" />
-                  <button type="submit" class="btn btn-danger">Delete</button>
-                </form>
+        <% if (uploadedImages) { %>
+
+
+          <% for(let i=0; i < uploadedImages.length; i++) { %>
+            <div class="col-md-3">
+              <div class="card mt-2 mb-2 ">
+                <img src="<%= uploadedImages[i]%>" class="card-img-top" alt="Uploaded Image" />
+                <div class="card-body">
+                  <a href="<%= uploadedImages[i] %>" download="image_<%= i %>.jpg" class="btn btn-primary">View</a>
+                  <form action="/profile/delete/image" method="post">
+                    <input type="hidden" name="delete_file_name" value="<%= uploadedImages[i] %>" />
+                    <button type="submit" class="btn delete btn-danger">Delete</button>
+                  </form>
+                </div>
               </div>
             </div>
-          </div>
-          <% } %>
+            <% } %>
+              <% } %>
       </div>
       <script>
         const deleteButtons = document.querySelectorAll('.delete');
+        const account_del = document.getElementById("account").addEventListener("click", (account_del) => {
+          const confirmed = confirm('Are you sure you want to delete your account')
+        });
         deleteButtons.forEach(button => {
           button.addEventListener('click', (event) => {
             const confirmed = confirm('Are you sure you want to delete this image?');

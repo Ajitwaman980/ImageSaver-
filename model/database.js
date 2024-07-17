@@ -17,32 +17,37 @@ async function mYDatabase_connected() {
 mYDatabase_connected();
 
 // Define the user schema
-const userSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    match: [/.+\@.+\..+/, "Please enter a valid email address"],
-  },
-  aboutYou: {
-    type: String,
-    default: "",
-  },
-  uploadedImages: [
-    {
+const userSchema = new mongoose.Schema(
+  {
+    username: {
       type: String,
+      required: true,
+      unique: true,
     },
-  ],
-});
+    password: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      match: [/.+\@.+\..+/, "Please enter a valid email address"],
+    },
+    aboutYou: {
+      type: String,
+      default: "",
+    },
+    uploadedImages: [
+      {
+        type: String,
+      },
+    ],
+  },
+  {
+    timestamps: true,
+  }
+);
 
 // Passport-Local Mongoose plugin
 userSchema.plugin(plm);

@@ -1,3 +1,0 @@
-username :ajitwaman43
-password:1eUcwH7unYoKkMMp
-mongodb+srv://ajitwaman43:1eUcwH7unYoKkMMp@cluster0.naxlhai.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0

@@ -10,7 +10,8 @@ const upload = multer({ storage: cloudinary_for_storage });
 const session = require("express-session");
 // node cacheing
 const nodeCache = require("node-cache");
-const NodeCache = new nodeCache({ stdTTL: 10 });
+const { userInfo } = require("os");
+const NodeCache = new nodeCache();
 
 passport.use(User.createStrategy());
 
@@ -21,18 +22,17 @@ exports.getHome = (req, res) => {
 exports.getProfile = async (req, res) => {
   try {
     const user_id = req.user._id;
-    // let user_info;
-    // const cache_key = user_id.toString();
-    // if (NodeCache.has(cache_key)) {
-    //   user_info = NodeCache.get(cache_key);
-    //   console.log("this is worked caching working ");
-    // } else {
-    //   user_info = await User.findById(user_id);
-    //   user_info = NodeCache.set(cache_key, user_info);
-    //   console.log("this is worked else");
-    // }
+    let user_info;
+    // node cacheing
+    const cache_key = user_id.toString();
+    if (NodeCache.has(cache_key)) {
+      user_info = NodeCache.get(cache_key);
+    } else {
+      user_info = await User.findById(user_id);
+      NodeCache.set(cache_key, user_info);
+    }
 
-    const user_info = await User.findById(user_id);
+    // const user_info = await User.findById(user_id);
     const { username, email, aboutYou, uploadedImages } = user_info;
     res.render("profile", {
       user_id,
@@ -42,58 +42,63 @@ exports.getProfile = async (req, res) => {
       success_msg: req.flash("success_msg"),
     });
   } catch (err) {
-    console.error("Error fetching user data:", err);
+    // console.error("Error fetching user data:", err);
     res.redirect("/");
   }
 };
-
+// upload image get req
 exports.getUpload = (req, res) => {
-  return res.render("upload");
+  const userId = req.user._id;
+  return res.render("upload", { userId: userId });
 };
+// post req
+exports.postUpload = async (req, res) => {
+  if (req.file) {
+    let id = req.params;
+    // console.log(id);
+    const imageUrl = req.file.path;
+    try {
+      const userId = req.user._id;
+      const cache_key = userId.toString();
 
-(exports.postUpload = upload.single("image_upload")),
-  async (req, res) => {
-    if (req.file) {
-      const imageUrl = req.file.path;
-      try {
-        const userId = req.user._id;
-        // const cache_key = userId.toString();
+      let image_upload = await User.findByIdAndUpdate(
+        userId,
+        { $push: { uploadedImages: imageUrl } },
+        { new: true }
+      );
 
-        let image_upload = await User.findByIdAndUpdate(
-          userId,
-          { $push: { uploadedImages: imageUrl } },
-          { new: true }
-        );
+      NodeCache.del(cache_key);
 
-        // NodeCache.del(cache_key);
-        console.log("Image uploaded and linked to the user.");
-        res.redirect("/profile");
-      } catch (error) {
-        console.error("Error uploading image:", error);
-        res.redirect("/profile");
-      }
-    } else {
-      res.redirect("/profile");
+      // console.log("Image uploaded and linked to the user.");
+      res.redirect("/profile/u/user");
+    } catch (error) {
+      // console.error("Error uploading image:", error);
+      res.redirect("/profile/u/user");
     }
-  };
+  } else {
+    res.redirect("/profile/u/user");
+  }
+};
 
 exports.postDeleteImage = async (req, res) => {
   const userId = req.user._id;
   const { delete_file_name } = req.body;
 
   try {
+    let cache_key = userId.toString();
     await User.findByIdAndUpdate(
       userId,
       { $pull: { uploadedImages: delete_file_name } },
       { new: true }
     );
-    const imagePath = path.join(__dirname, "../uploads/", delete_file_name);
-    fs.unlinkSync(imagePath);
-    console.log("Image deleted successfully.");
-    res.redirect("/profile");
+
+    NodeCache.del(cache_key);
+    // console.log("Image deleted successfully.");
+
+    res.redirect("/profile/u/user");
   } catch (e) {
-    console.error("Error deleting image:", e);
-    res.redirect("/profile");
+    // console.error("Error deleting image:", e);
+    res.redirect("/profile/u/user");
   }
 };
 
@@ -115,11 +120,11 @@ exports.postRegister = (req, res) => {
       passport.authenticate("local")(req, res, () => {
         // req.cookie("userdata", req.body);
         req.flash("success_msg", "Account has been created successfully");
-        res.redirect("/profile");
+        res.redirect("/profile/u/user");
       });
     })
     .catch((error) => {
-      console.error("Error registering user:", error);
+      // console.error("Error registering user:", error);
       req.flash("error", "Error registering user: " + error.message);
       res.redirect("/Sign_up/user");
     });
@@ -130,7 +135,7 @@ exports.getLogin = (req, res) => {
 };
 
 exports.postLogin = passport.authenticate("local", {
-  successRedirect: "/profile",
+  successRedirect: "/profile/u/user",
   failureRedirect: "/login/user",
   failureFlash: true,
 });

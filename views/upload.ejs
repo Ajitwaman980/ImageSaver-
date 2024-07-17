@@ -4,6 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="../android-chrome-512x512.png">
+
   <title>Upload Images</title>
   <style>
     body {
@@ -74,13 +76,44 @@
   <div class="container">
     <h1>Upload Images</h1>
     <div class="img-upload">
-      <form action="/profile/upload" method="post" enctype="multipart/form-data">
+      <form action="/profile/upload/<%=userId%>/image" method="post" enctype="multipart/form-data">
         <input type="file" id="image_upload" name="image_upload" multiple accept="image/*" />
-        <label for="image_upload">Choose Images</label>
-        <button type="submit">Upload</button>
+        <label id="image_label" for="image_upload">Choose Images</label>
+        <button id="upload_button" type="submit">Upload</button>
       </form>
     </div>
   </div>
+  <script>
+    document.getElementById("image_upload").addEventListener("change", function () {
+      const image_label = document.getElementById("image_label");
+      const fileInput = document.getElementById("image_upload");
+      const upload_button = document.getElementById("upload_button");
+      const img_upload_main = document.getElementsByClassName("img-upload");
+      if (fileInput.files.length > 0) {
+        image_label.textContent = "Images Selected";
+        image_label.style.background = "red";
+        image_label.style.pointerEvents = "none";
+
+      }
+      else {
+        image_label.textContent = "Choose Images";
+        image_label.style.backgroundColor = "";
+        image_label.style.pointerEvents = "auto";
+        img_upload_main.style.background = "none";
+
+      }
+
+    })
+
+    // check if the image is uploaded or not
+    document.getElementById("upload_form").addEventListener("submit", function (event) {
+      const fileInput = document.getElementById("image_upload");
+      if (fileInput.files.length === 0) {
+        event.preventDefault();
+        alert("Please select at least one image to upload.");
+      }
+    });
+  </script>
 </body>
 
 </html>

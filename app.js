@@ -9,8 +9,10 @@ const passport = require("passport");
 const MongoStore = require("connect-mongo");
 const session = require("express-session");
 const flash = require("connect-flash");
-var app = express();
+const app = express();
 const nodeCache = require("node-cache");
+// helemt
+const helmet = require("helmet");
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -51,7 +53,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-
+// app.use(helmet());
+// app.use(helmet.hidePoweredBy());
 // this is used for retrieving images from the upload folder
 app.use("/uploads", express.static("uploads"));
 
